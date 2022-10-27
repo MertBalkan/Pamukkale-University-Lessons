@@ -1,0 +1,147 @@
+\documentclass{IEEEtran}
+\usepackage[utf8]{inputenc} % Türkçe karakterler
+\usepackage[T1]{fontenc} % Türkçe heceleme için
+\usepackage[turkish,shorthands=:!]{babel} % Türkçe bölüm, şekil, tablo vb. isimler
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{minted}
+\usepackage{listings}
+
+
+\renewcommand\IEEEkeywordsname{Anahtar kelimeler}% Dokümanın türkçesi için gerekli
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                           Doküman İçeriği                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Bilgisayar Grafikleri}%Başlığı değiştirin
+\author{Mert Balkan, 20253508, mbalkan20@posta.pau.edu.tr \\ Ceren Parmaksız, 20253081, cparmaksiz20@posta.pau.edu.tr \\ Çağan Özkan, 21253071, cozkan211@posta.pau.edu.tr} %Öğrenci isimleri, numaraları ve e-posta adresleri bu kısıma girilecek
+
+\markboth{PAÜ Bilgisayar Mühendisliği, CENG 104 - Bilgisayar Mühendisliği Semineri}{\@title} % Sayfanın üstünde ders adını ve konu başlığını gösterir. Lütfen kaldırmayınız.
+
+
+\maketitle
+
+\begin{abstract}
+Bilgisayar Grafikleri nedir, bilgisayar grafiklerinin tarihi, bilgisayar grafikleri nerelerde kullanılır ve bilgisayar grafiklerinde kullanılan bir API olan OpenGL'in bir kullanım örneği.
+\end{abstract}
+
+\begin{IEEEkeywords}%Anahtar kelimeler
+bilgisayar grafikleri, işlemci, ekran kartı, grafiklerin kullanım alanları, grafik, OpenGL
+\end{IEEEkeywords}
+
+\section{Giriş}
+\label{sec:giris}
+
+Bilgisayar Grafikleri (Computer graphics, CG) Çoklu Ortam’ın pek çok alanında kullanılan, görsel hesaplamalar sayesinde gerçek hayattaki cisimlerin “gerçekçi” bir şekilde bilgisayar veya akıllı sistemler üzerinde yaratılmasına dayanan çalışma alanıdır.
+Gerçek zamanlı 3B (3D) canlandırma, dijital bilgisayarlar üzerinde çalışan özel yazılımlar yardımıyla bir objenin geometrik bilgisi ve yüzey dokusu ile sürekli olarak canlandırılmasıdır. Bu canlandırma bilgisayar oyunlarının temelini oluşturur.
+
+Gerçek zamanlı 3B (3D) canlandırma, dijital bilgisayarlar üzerinde çalışan özel yazılımlar yardımıyla bir objenin geometrik bilgisi ve yüzey dokusu ile sürekli olarak canlandırılmasıdır. Bu canlandırma bilgisayar oyunlarının temelini oluşturur. 
+
+Ayrıca 3B canlandırma; sağlık, mühendislik, askeri projeler vb. pek çok farklı alanda kullanılmaktadır. 3B canlandırmayı yapan bilgisayar programları çok verimli oluşturulmalıdır, aksi takdirde homojen ve tekrar eden sağlıklı bir görüntü elde edilemez. Bu programlar genellikle, önceden tanımlı olan ve canlandırmayı kolaylaştıracak bazı fonksiyonları içeren kütüphaneleri kullanırlar. 
+
+Günümüzde en çok kullanılan, içerisinde bilgisayar grafikleri için gerekli temel fonksiyonların bulunduğu grafik kütüphaneleri OpenGL ve DirectX ve Vulkan'dır. \cite{wikipedia}
+
+Bölüm \ref{sec:tarihce} bilgisayar grafiklerinin tarihi hakkında bilgi vermektedir. Bölüm \ref{sec:kullanimalanlari} bilgisayar grafiklerinin kullanım alanları ve son olarak bölüm \ref{sec:gosterim}'de OpenGL'de basit bir üçgenin çizimi ele alınacaktır.
+
+\section{Bilgisayar Grafiklerinin Tarihi}
+\label{sec:tarihce}
+Bilgisayar Grafikleri 20.yüzyılın ilk yarısında popüler değildi.Aslında 1895'ten beri ekranlara Lumiere kardeşler sayesinde görüntü geliyordu ama pek akıcı değildi.İlk katod ışın tüpü Braun tüpü 1897'de icat edildi.Bu gelişme sayesinde osiloskopa ve askeri kontrol paneline erişim sağlandı.Alanın daha doğrudan öncüleri programatiklere yanıt veren ilk iki boyutlu elektronik ekranı icat ettiler.Ama yine de, bilgisayar grafikleri, 1950'lere ve II. Dünya Savaşı sonrası döneme kadar bir disiplin olarak bilinmez kaldı.
+\subsection{1950-1960}
+Whirlwind ve SAGE Projects gibi erken projeler, CRT(Cathode Ray Tube)'yi uygun bir ekran ve etkileşim arayüzü olarak tanıttı ve ışıklı kalemi bir giriş cihazı olarak tanıttı. Whirlwind SAGE sisteminden Douglas T. Ross, parmağının hareketini yakalayan ve vektörünü bir görüntüleme kapsamında görüntüleyen küçük bir program yazdığı kişisel bir deney gerçekleştirdi.  Ivan Sutherland'ın devrim niteliğindeki Sketchpad yazılımını kullanarak bilgisayarda şekiller çizilmeye başlandı. \cite{crazyprogrammer}
+\subsection{1960-1970}
+1961'de MIT'de öğrenci olan Steve Russell, video oyunları tarihinde önemli bir proje geliştirdi, "Spacewar". IBM, ticari olarak satılan ilk grafik bilgisayarı olan IBM 2250 grafik terminalini piyasaya sürerek bu ilgiye hızlı bir şekilde yanıt verdi. 1966'da Utah Üniversitesi, bir bilgisayar bilimi bölümü oluşturmak için David C. Evans'ı işe aldı. Bu yeni bölüm, 1970'ler boyunca bilgisayar grafikleri için dünyanın birincil araştırma merkezi haline gelecekti. Ivan Sutherland, ilk bilgisayar kontrollü başa takılan ekranı (HMD) icat etti.
+\subsection{1970-1980}
+Daha sonra, 1970'lerde Ivan Sutherland'ı işe alan Utah Üniversitesi'nde bu alanda bir dizi atılım özellikle grafiklerin faydacıdan gerçekçiye dönüşümündeki önemli erken atılımlar gerçekleşti. David C. Evans ile birlikte, ileri düzey bir bilgisayar grafikleri dersi vermek üzere görevlendirildi; bu, sahaya çok sayıda kurucu araştırma katkısında bulundu.  Yine 1970'lerde Henri Gouraud, Jim Blinn ve Bui Tuong Phong, Gouraud gölgeleme ve Blinn-Phong gölgeleme modellerinin geliştirilmesi yoluyla CGI'daki gölgelemenin temellerine katkıda bulundular. Bugün bilindiği gibi modern video oyunu arcade, 1970'lerde, gerçek zamanlı 2D hareketli grafik kullanan ilk arcade oyunlarıyla doğdu. 1972'deki Pong, ilk hit atari kabine oyunlarından biriydi. 1974'teki Speed Race, dikey olarak kayan bir yol boyunca hareket eden sprite'ları içeriyordu. 1975'te Gun Fight, insan görünümlü animasyon karakterlerine yer verirken, 1978'de Space Invaders ekranda çok sayıda animasyonlu figüre yer verdi.
+\subsection{1980-1990}
+ Ev bilgisayarı yaygınlaştıkça, daha önce sadece akademisyenlere açık olan bir konu, çok daha geniş bir kitle tarafından benimsendi ve bilgisayar grafiği geliştiricilerinin sayısı önemli ölçüde arttı. 1980'lerin başında, metal-oksit-yarı iletken (MOS) çok büyük ölçekli entegrasyon (VLSI) teknolojisi, 16 bitlik merkezi işlem birimi (CPU) mikroişlemcilerinin ve ilk grafik işlem birimi (GPU) yongalarının bulunmasına yol açtı. 1980'ler aynı zamanda video oyunlarının altın çağı olarak da adlandırılır. Atari, Nintendo ve Sega'dan milyonlarca satan oyunlar, bilgisayar grafiklerini ilk kez yeni, genç ve etkileyici bir kitleye sundu. 1988'de, oyun salonları için ilk özel gerçek zamanlı 3D grafik kartları, Namco System 21 ve Taito Air System ile tanıtıldı. Profesyonel tarafta, Evans & Sutherland ve SGI, grafikleri optimize etmek için bir CPU ile paralel işlemede ayrı ve çok güçlü bir çipin kullanıldığı bir teknoloji olan sonraki tek çipli grafik işleme birimini (GPU) doğrudan etkileyen 3D raster grafik donanımı geliştirdi\cite{CG}
+\subsection{1990-2000}
+1990'ların en önemli yönü, kitlesel ölçekte 3D modellemenin ortaya çıkması ve genel olarak CGI kalitesindeki etkileyici bir artıştı. 3D grafikler oyun, multimedya ve animasyonda çok daha popüler hale geldi.Filmde, Pixar bu çağda ciddi ticari yükselişine Edwin Catmull yönetiminde, ilk büyük filmi 1995'te "Toy Story" dokuz rakam büyüklüğünde kritik ve ticari bir başarı ile başladı. Video oyunlarında, 1992'de, Sega Model 1 arcade sistem kartında çalışan Virtua Racing, tamamen 3D yarış oyunlarının temellerini attı.İlk kitlesel olarak popüler 3D birinci şahıs nişancı oyunlarından üçü olan Wolfenstein 3D, Doom ve Quake, id Software tarafından, bu on yıl boyunca, öncelikle John Carmack tarafından yenilenen bir işleme motoru kullanılarak eleştirel ve popüler beğeni topladı. On yılın sonunda, bilgisayarlar DirectX ve OpenGL gibi grafik işleme için ortak çerçeveleri benimsedi.
+\subsection{2000-2010}
+CGI bu dönemde ciddi anlamda her yerde bulunur hale geldi. Video oyunları ve CGI sineması, bilgisayar grafiklerinin erişimini 1990'ların sonunda ana akıma yaydı ve 2000'lerde hızlandırılmış bir hızla yapmaya devam etti. CGI aynı zamanda 1990'ların sonlarında ve 2000'lerde televizyon reklamları için toplu olarak benimsendi ve böylece büyük bir izleyici kitlesine aşina oldu. Grafik işleme biriminin sürekli yükselişi ve artan karmaşıklığı bu on yıl için çok önemliydi ve 3B grafik GPU'ları masaüstü bilgisayar üreticilerinin sunması için bir zorunluluk olarak kabul edildiğinden 3B oluşturma yetenekleri standart bir özellik haline geldi. Video oyunlarında, Sony PlayStation 2 ve 3, Microsoft Xbox konsol serisi ve GameCube gibi Nintendo'nun teklifleri, Windows PC'de olduğu gibi büyük bir takipçi kitlesini elinde tuttu. Microsoft, XNA programıyla DirectX'i bağımsız geliştirici dünyasına daha kolay sunma kararı aldı, ancak bu başarılı olmadı. Ancak DirectX'in kendisi ticari bir başarı olarak kaldı. OpenGL de olgunlaşmaya devam etti ve o ve DirectX büyük ölçüde gelişti.
+\subsection{2010-2020}
+2010'larda, CGI videoda neredeyse her yerde bulunuyordu, önceden oluşturulmuş grafikler neredeyse bilimsel olarak fotogerçekçiydi ve uygun bir üst düzey sistemdeki gerçek zamanlı grafikler, eğitimsiz göze fotogerçekçiliği simüle edebilir. Doku eşleme, birçok katman içeren çok aşamalı bir süreç haline geldi; genel olarak, doku eşleme, çarpma eşleme veya eş yüzeyler veya normal eşleme, aynasal vurgular ve yansıma teknikleri dahil aydınlatma haritaları ve önemli ölçüde olgunlaşan gölgelendiriciler kullanarak tek bir işleme motoruna gölge hacimleri uygulamak nadir değildir. Gölgelendiriciler, pikselleri, tepe noktalarını ve dokuları eleman bazında manipüle etmede önemli bir karmaşıklık ve sayısız olası efekt sağlayarak, artık sahada ileri düzey çalışmalar için neredeyse bir gerekliliktir. 
+
+
+\section{Bilgisayar Grafikleri Kullanım Alanları}
+\label{sec:kullanimalanlari}
+Bilgisayar Grafikleri günümüzde çok fazla alanda kullanılmaktadır. Bazı kullanım alanları da şöyledir.
+
+\subsection{Gerçek Zamanlı 3D Canlandırma}
+Gerçek zamanlı 3B (3D) canlandırma, dijital bilgisayarlar üzerinde çalışan özel yazılımlar yardımıyla bir objenin geometrik bilgisi ve yüzey dokusu ile sürekli olarak canlandırılmasıdır. Bu canlandırma bilgisayar oyunlarının temelini oluşturur. Ayrıca 3B canlandırma; sağlık, mühendislik, askeri projeler vb. pek çok farklı alanda kullanılmaktadır. \cite{ebergi}
+
+\subsection{Resim İşleme}
+Genelde 2Boyutlu resimler veya animasyon çerçeveleri üzerinde çeşitli işlemler olarak tanımlanabilir. Resim işlemenin de kullanım alanları çok çeşitlidir. Örnek vermek gerekirse bir görüntü üzerinde bir objenin yerinin tanımlanması çeşitli resim işleme algoritmaları ile yapılır. Aşağıdaki resim bir bilgisayar tarafından üretilmiştir.\cite{ebergi}
+
+\subsection{Tıbbi Görüntüleme}
+ Bilgisayar grafiklerinin hayat kurtarmada önemli bir rol oynadığı söylenebilir.
+Uygulama yelpazesi, tedaviye kadar öğretme ve tanılama araçlarından
+oluşmaktadır.\cite{omercetin}
+
+\subsection{Bilimsel Görselleştirme}
+ Matematikçiler soyut ve yüksek
+boyutlu fonksiyon ve uzayları keşfetmek için bilgisayar grafiklerini kullanırlar.
+Fizikçiler ölçek sınırlarını aşmak için bilgisayar grafiklerini kullanabilirler.
+Bununla beraber hem mikroskobik hem de makroskobik dünyaları
+keşfedebilirler.\cite{bilimselgorsellestirme}
+
+\subsection{Animasyon}
+Bilgisayar animasyonu , bilgisayarları kullanarak hareketli görüntüler oluşturma sanatıdır. Animasyon elde etmek için birden fazla yöntem mevcuttur; animasyon yapılacak öznitelik başına her biri belirli bir zamanda bir değer depolayan ana karelerin oluşturulmasına ve düzenlenmesine dayanır . 2D/3D grafik yazılımı, her bir ana kare ile değişecek ve zamanla eşlenen bir değerin düzenlenebilir bir eğrisini yaratacak ve bu da animasyonla sonuçlanacaktır.\cite{omercetin}
+
+\subsection{Oyunlar}
+Oyunlar bilgisayar grafiklerinde önemli bir itici güçtür. Daha çok 3D modelleme oyunların yapımında büyük bir yer kaplar bunun yanında gölgeleme,hacim oluşturma gibi birçok teknikten yararlanılarak oyunlar oluşturulur. Özellikle 1990 yılı, bilgisayar grafikleri için tüketici tabanlı teknolojiye dönüşmüştür. Evde kullanılan bilgisayarlar 3 boyutlu kompleks<WE grafikleri işleyebilir olmuştur ve bunun sonucunda Wolfenstein 3D, Doom, Quake hatta daha da ötesinde Autodesk's 3D (şimdi 3DsMax olarak bilinir) gibi oyunlar ve modelleme programları ortaya çıkmıştır.\cite{mkl1}
+
+\subsection{Eğitim}
+1991 yılında John Clevenger, bilgisayar grafiklerini öğretmek için TUGS(The Universal Graphics System) adında bir aracı tanıttı. Bu programı yazanlar, bilgisayar grafiklerini en iyi öğretmenin yolunun öğrencilere, modelleme desteği de olan, "grafik işlemleri" süreçlerinin iyi anlaşılması gerektiğini tartışıyorlardı. 2002'de Yang ve Sanver web tabanlı bilgisayar grafikleri konseptlerini ve OpenGL fonksiyonlarını geliştirmek için Java ve GL4jJava kullandı. Yang ve Sanver gerçek dünya sahnesini ve işlenmiş veri sonuçlarını yan yana koyarak, öğrencilerden OpenGL fonksiyonlarının parametrelerini değiştirmelerini istediler. Böylece öğrenciler gerçek zamanlı olarak işlenmiş verilerin sonuçlarını ekranda hızlıca görebiliyorlardı. 2006'da Spalter ve Tennenson Graphics Teaching Tool (GTT)'yi tanıttı. GTT, 2D ve 3D grafikleri tek bir ortamda birleştirebilen java tabanlı bir uygulamaydı. Ayrıca 2006'da Peternier, bilgisayar grafikleri tabanlı öğretim platformu olan "Mental Vision"'ı tanıttı.\cite{mkl1}
+
+
+
+
+
+\section{OpenGL'de Örnek Bir Üçgen Çizimi}
+\label{sec:gosterim}
+Bu bölümde OpenGL'de örnek bir üçgen çizimi gösterilecektir. Aşağıdaki kod, bizlere koordinat ekseninde verdiğimiz değerlere göre, bir üçgen çizecektir.
+\begin{lstlisting}[language=C++]
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+int main()
+{
+    GLFWwindow* window;
+    if (!glfwInit())
+        return -1;
+    window = glfwCreateWindow(640, 480, 
+        "Hello");
+    if (!window) { glfwTerminate(); }
+    glfwMakeContextCurrent(window);
+     GLuint buffer;
+    float positions[6] = {
+        -0.5f, -0.5f,
+         0.0f,  0.5f,
+         0.5f, -0.5f
+    };
+    glGenBuffers(1, &buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, buffer);
+    glBufferData(GL_ARRAY_BUFFER,
+     6 * sizeof(float), positions, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+     while (!glfwWindowShouldClose(window))
+    {
+        glClear(GL_COLOR_BUFFER_BIT);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+    glfwTerminate();
+    return 0;
+}
+\end{lstlisting}
+
+\bibliographystyle{plain}%Kaynak biçimi
+\bibliography{kaynak}%Kaynakları otomatik ekler
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                           Doküman İçeriği                             %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
